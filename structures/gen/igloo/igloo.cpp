@@ -6,6 +6,9 @@
 #include "terrain/World.hpp"
 
 #include "lce/blocks/__include.hpp"
+#include "structures/gen2/PlacementSettings.hpp"
+#include "structures/gen2/Template.hpp"
+#include "structures/gen2/TemplateManager.hpp"
 
 namespace scattered_features {
 

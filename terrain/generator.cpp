@@ -240,7 +240,7 @@ i32 Generator::genBiomes(biome_t *cache, const Range &range) const {
  * @return biome id or -1 if failed
  */
 biome_t Generator::getBiomeIdAt(c_u32 scale, c_int x, c_int z) const {
-    if (biome_t *biomeCache = getCacheAtBlock(scale, x, z)) return *biomeCache;
+    if (biome_t *biomeCache = getCacheAtBlock(scale, x, z); *biomeCache != biome_t::none) return *biomeCache;
 
     const Range r = {scale, x, z, 1, 1};
     biome_t *ids = allocCache(r);
@@ -275,7 +275,7 @@ biome_t *Generator::getBiomeRange(c_u32 scale, c_int x, c_int z, c_int w, c_int 
 
 
 biome_t *Generator::getCacheAtBlock(u32 scale, int x, int z) const {
-    static biome_t outside_world = biome_t::ocean;
+    static biome_t outside_world = biome_t::none;
 
     const auto cacheVecPos = static_cast<size_t>(CTZ(scale) / 2); // Count trailing zeros to get the index
     // std::cout << cacheVecPos << std::endl;

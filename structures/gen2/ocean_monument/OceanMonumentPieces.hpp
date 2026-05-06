@@ -9,11 +9,11 @@
 #include "common/RotationAndMirror.hpp"
 #include "common/rng.hpp"
 
-#include "Seedra/structures/gen2/ResourceLocation.hpp"
-#include "Seedra/structures/gen2/StructureComponentTemplate.hpp"
-#include "Seedra/structures/gen2/Template.hpp"
-#include "Seedra/structures/gen2/TemplateManager.hpp"
-#include "Seedra/terrain/World.hpp"
+#include "structures/gen2/ResourceLocation.hpp"
+#include "structures/gen2/StructureComponentTemplate.hpp"
+#include "structures/gen2/Template.hpp"
+#include "structures/gen2/TemplateManager.hpp"
+#include "terrain/World.hpp"
 
 template<typename T>
 void Collections_shuffle(std::vector<T>& vec, RNG& rnd) {

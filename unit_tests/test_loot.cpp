@@ -14,6 +14,7 @@
 
 // ── items for asserting item IDs ───────────────────────────────────────────
 #include "lce/items/itemsInit.hpp"
+#include "loot/tables/stronghold_library.hpp"
 
 #include <sstream>
 #include <string>
@@ -487,6 +488,28 @@ TEST_SUITE("LootTable_buried_treasure") {
         }
     }
 
+    TEST_CASE("correct loot for given seed") {
+        Container<27> c1, c2;
+        buried_treasure.getLootFromBlock<GenMode::MOD_NO_SHUF>(c1, 5082279377984016605, 344, -295);
+        buried_treasure.getLootFromBlock<GenMode::MOD_NO_SHUF>(c2, 5082279377984016605, -360, 105);
+        int numCake1 = 0;
+        int numCake2 = 0;
+        for (size_t i = 0; i < c1.slotCount(); ++i) {
+            const auto& slot1 = c1.getSlotAt(static_cast<i32>(i));
+            if (slot1.getID() == CAKE.getID()) {
+                numCake1 += slot1.getCount();
+            }
+        }
+        for (size_t i = 0; i < c2.slotCount(); ++i) {
+            const auto& slot2 = c2.getSlotAt(static_cast<i32>(i));
+            if (slot2.getID() == CAKE.getID()) {
+                numCake2 += slot2.getCount();
+            }
+        }
+        CHECK(numCake1 == 5);
+        CHECK(numCake2 == 5);
+    }
+
     TEST_CASE("slot count is within plausible bounds") {
         // buried_treasure has 2 tables: Roll(1,1) + Roll(5,12). Max items = 13.
         for (i64 seed = 1; seed <= 10; ++seed) {
@@ -506,3 +529,24 @@ TEST_SUITE("LootTable_buried_treasure") {
     }
 }
 
+TEST_SUITE("Enchants") {
+    TEST_CASE("Correct enchants for given loot seed (WIIU aquatic)") {
+        enchants::EnchantController::setup(lce::CONSOLE::WIIU, LCEVERSION::AQUATIC);
+        Container<27> c;
+        stronghold_library.getLootFromLootTableSeed<GenMode::MOD_NO_SHUF>(c, 216765366LL);
+        CHECK(c.enchantCount() == 11u);
+        std::vector<std::string> expectedEnchants = {
+                "Loyalty III", "Punch I", "Power IV", "Efficiency IV", "Mending", "Protection IV",
+                "Frost Walker II", "Aqua Affinity", "Smite IV", "Curse of Vanishing", "Loyalty III"};
+        for (size_t i = 0; i < c.enchantCount(); ++i) { CHECK(c.getEnchantAt(i).toString() == expectedEnchants[i]); }
+    }
+
+    TEST_CASE("Correct enchants for given loot seed (PS3 aquatic)") {
+        enchants::EnchantController::setup(lce::CONSOLE::PS3, LCEVERSION::AQUATIC);
+        Container<27> c;
+        stronghold_library.getLootFromLootTableSeed<GenMode::MOD_NO_SHUF>(c, 2540137978986425799LL);
+        CHECK(c.enchantCount() == 1u);
+        std::vector<std::string> expectedEnchants = {"Protection III"};
+        for (size_t i = 0; i < c.enchantCount(); ++i) { CHECK(c.getEnchantAt(i).toString() == expectedEnchants[i]); }
+    }
+}

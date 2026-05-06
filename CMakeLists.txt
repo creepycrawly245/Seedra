@@ -220,6 +220,7 @@ if(LC_BUILD_EXECUTABLE)
     add_cli(EXE_ValidateReversedSeeds "tests/validate_reversed_seeds.cpp")
     add_cli(EXE_ValidateWorldSeeds "tests/validate_world_seeds.cpp")
     add_cli(EXE_CheckChestAdjacency "tests/check_chest_adjacency.cpp")
+    add_cli(EXE_FindBookWeightSeeds "tests/find_book_weight_seeds.cpp")
 
     # ── Unit Tests (doctest) ──────────────────────────────────────────
     enable_testing()
@@ -237,17 +238,10 @@ if(LC_BUILD_EXECUTABLE)
         unit_tests/test_piece_weight.cpp
         unit_tests/test_loot.cpp
         unit_tests/test_terrain.cpp
-        common/MathHelper.cpp          # only non-header dep needed by tests
-        lce/enums.cpp                  # provides getAxis() used by RotationAndMirror
-        terrain/PopulationReverser.cpp # needed by test_terrain
-        loot/enchants/enchant.cpp
-        loot/enchants/enchants.cpp
-        loot/enchants/enchantController.cpp
-        loot/enchants/enchantRegistry.cpp
-        loot/enchants/enchantState.cpp
-        loot/enchants/enchantsInit.cpp
-        loot/enchants/fastBookEnchantArray.cpp
+        unit_tests/test_structures.cpp  # structure + stronghold placement tests
     )
+    # All .cpp deps (generator, biomes, structures, loot, lce…) are provided by LIB_Seedra
+    target_link_libraries(EXE_UnitTests PRIVATE LIB_Seedra)
     target_include_directories(EXE_UnitTests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}    # project root for "common/..." includes
         ${LCE_INCLUDE_DIR}             # lce headers

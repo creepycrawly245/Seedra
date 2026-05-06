@@ -281,9 +281,9 @@ namespace Placement {
      */
     class Outpost : public DynamicStructure<Outpost> {
     public:
-        static constexpr int  SALT                   = 165745296;
-        static constexpr int  MAIN_RADIUS            = 32;
-        static constexpr bool HAS_SECOND_BIOME_CHECK = false;
+        static constexpr int    SALT                   = 165745296;
+        static constexpr int    MAIN_RADIUS            = 32;
+        static constexpr bool   HAS_SECOND_BIOME_CHECK = false;
 
         static constexpr u64  MAIN_VALID_BIOMES =
                 makeBiomeBitmask<biome_t::plains, biome_t::desert, biome_t::taiga,

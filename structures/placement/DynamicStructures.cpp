@@ -35,7 +35,6 @@ namespace Placement {
                 int zPos = (zChunk << 4) + 8;
                 if (xChunk < Derived::CHUNK_BOUNDS && xChunk >= -Derived::CHUNK_BOUNDS
                     && zChunk < Derived::CHUNK_BOUNDS && zChunk >= -Derived::CHUNK_BOUNDS) {
-
                     if (Derived::verifyBlockPosition(g, xPos, zPos)) {
                         return {xPos, zPos};
                     }
@@ -218,15 +217,17 @@ namespace Placement {
 
     template<>
     int DynamicStructure<Outpost>::CHUNK_RANGE = 26;
+    template<>
+    size_t DynamicStructure<Outpost>::ATTEMPTS = 64;
     void Outpost::setWorldSize(const lce::WORLDSIZE worldSize) {
         CHUNK_BOUNDS = getChunkWorldBounds(worldSize) - 3;
         // prevent from setting the same values
         c_bool reducedSpacing = worldSize < lce::WORLDSIZE::MEDIUM;
         if (REDUCED_SPACING == reducedSpacing) return;
         REDUCED_SPACING = reducedSpacing;
-        REGION_SIZE = reducedSpacing ? 32 : 80;
+        REGION_SIZE = reducedSpacing ? 32 : 48;
         CHUNK_RANGE = REGION_SIZE - 6;
-        ATTEMPTS = reducedSpacing ? 60 : 40;
+        ATTEMPTS = reducedSpacing ? 64 : 48; // TODO verify (it's somewhere 64+)
     }
 } // namespace Placement
 

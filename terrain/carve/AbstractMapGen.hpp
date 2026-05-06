@@ -28,7 +28,7 @@ public:
     /**
      * @brief Pointer to the generator associated with the world.
      */
-    Generator *m_g;
+    const Generator* m_g;
 
     /**
      * @brief Random number generator used for feature generation.

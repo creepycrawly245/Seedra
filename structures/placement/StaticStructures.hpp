@@ -158,12 +158,19 @@ namespace Placement {
 
         /**
          * @brief Gets the type of the feature at a specific block position.
+         * @param biome The biome ID at the block position.
+         * @return The type of the feature.
+         */
+        static StructureType getFeatureType(biome_t biome);
+
+        /**
+         * @brief Gets the type of the feature at a specific block position.
          * @param g Pointer to the generator.
          * @param blockX The X coordinate of the block.
          * @param blockZ The Z coordinate of the block.
          * @return The type of the feature.
          */
-        static StructureType getFeatureType(const Generator *g, int blockX, int blockZ);
+        static StructureType getFeatureTypeAt(const Generator *g, int blockX, int blockZ);
 
         /**
          * @brief Gets the type of the feature at a specific block position.
@@ -171,8 +178,8 @@ namespace Placement {
          * @param block The block position as a 2D coordinate.
          * @return The type of the feature.
          */
-        static StructureType getFeatureType(const Generator *g, const Pos2D &block) {
-            return getFeatureType(g, block.x, block.z);
+        static StructureType getFeatureTypeAt(const Generator *g, const Pos2D &block) {
+            return getFeatureTypeAt(g, block.x, block.z);
         }
 
         /**

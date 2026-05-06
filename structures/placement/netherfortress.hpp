@@ -15,12 +15,13 @@ namespace Placement {
         /**
          * @brief Calculates the world position of a Nether Fortress.
          *
-         * This method uses the provided world seed to determine the position of a Nether Fortress
+         * This method uses the provided world seed to determine the position of all Nether Fortresses
          * in the world.
          *
          * @param worldSeed The seed of the world.
-         * @return The position of the Nether Fortress as a 2D coordinate.
+         * @param worldSize The size of the world, which may affect the number of Nether Fortresses generated.
+         * @return The positions of all the Nether Fortresses as a 2D coordinate.
          */
-        MU ND static Pos2D getWorldPosition(i64 worldSeed);
+        MU ND static Pos2DVec_t getWorldPositions(i64 worldSeed, lce::WORLDSIZE worldSize = lce::WORLDSIZE::CLASSIC) noexcept;
     };
 }

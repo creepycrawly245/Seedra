@@ -90,12 +90,8 @@ namespace Placement {
         CHUNK_RANGE = REGION_SIZE - 8;
     }
 
-    StructureType Feature::getFeatureType(const Generator *g, c_int blockX, c_int blockZ) {
-        if (blockX < -g->getWorldCoordinateBounds() || blockX > g->getWorldCoordinateBounds() ||
-            blockZ < -g->getWorldCoordinateBounds() || blockZ > g->getWorldCoordinateBounds()) {
-            return StructureType::NONE;
-        }
-        switch (g->getBiomeIdAt(1, blockX, blockZ)) {
+    StructureType Feature::getFeatureType(biome_t biome) {
+        switch (biome) {
             case biome_t::desert:
             case biome_t::desert_hills:
                 return StructureType::DesertPyramid;
@@ -112,6 +108,14 @@ namespace Placement {
             default:
                 return StructureType::NONE;
         }
+    }
+
+    StructureType Feature::getFeatureTypeAt(const Generator *g, c_int blockX, c_int blockZ) {
+        if (blockX < -g->getWorldCoordinateBounds() || blockX > g->getWorldCoordinateBounds() ||
+            blockZ < -g->getWorldCoordinateBounds() || blockZ > g->getWorldCoordinateBounds()) {
+            return StructureType::NONE;
+        }
+        return getFeatureType(g->getBiomeIdAt(1, blockX, blockZ));
     }
 
     /**
@@ -147,7 +151,7 @@ namespace Placement {
             for (int regionZ = lowerZRegion; regionZ <= upperZRegion; ++regionZ) {
                 Pos2D structPos = getRegionBlockPosition(g->getWorldSeed(), regionX, regionZ);
                 if (structPos.insideBounds(lowerX, lowerZ, upperX, upperZ)) {
-                    StructureType structureType = getFeatureType(g, structPos);
+                    StructureType structureType = getFeatureTypeAt(g, structPos);
                     if (structureType != StructureType::NONE)
                         features.emplace_back(structPos, structureType);
                 }
