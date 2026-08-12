@@ -1,0 +1,8 @@
+Minecraft: Xbox One Edition Legacy Console Edition
+Legacy generation version: ELYTRA
+Seed: -5155870644958840792
+World size: LARGE
+Biome size: LARGE
+Find Balanced Seed: OFF
+
+This branch uses the raw seed directly in Generator.
