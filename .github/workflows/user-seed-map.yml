@@ -36,21 +36,25 @@ jobs:
 
       - name: Build custom seed runner
         run: |
-          clang++-18 -std=c++23 -O2 -mavx2 -msse4.1 \
-            -I. -Ilce \
-            tools/user_seed_map.cpp \
-            build/libLIB_Seedra.a \
-            -o build/user_seed_map
+          clang++-18 -std=c++23 -O2 -mavx2 -msse4.1 -I. -Ilce tools/user_seed_map.cpp build/libLIB_Seedra.a -o build/user_seed_map
+          clang++-18 -std=c++23 -O2 -mavx2 -msse4.1 -I. -Ilce tools/dungeon_scan.cpp build/libLIB_Seedra.a -o build/dungeon_scan
 
       - name: Generate biome map and coordinates
         run: ./build/user_seed_map
 
+      - name: Scan real dungeons near spawn
+        run: ./build/dungeon_scan
+
       - name: List generated files
-        run: find seed_output -maxdepth 2 -type f -print -exec ls -lh {} \;
+        run: |
+          find seed_output -maxdepth 2 -type f -print -exec ls -lh {} \;
+          find dungeon_output -maxdepth 2 -type f -print -exec ls -lh {} \;
 
       - name: Upload generated map and coordinates
         uses: actions/upload-artifact@v4
         with:
           name: xbox-one-seed--5155870644958840792
-          path: seed_output/
+          path: |
+            seed_output/
+            dungeon_output/
           if-no-files-found: error
