@@ -1,0 +1,56 @@
+name: Xbox One Seed Map
+
+on:
+  push:
+    branches:
+      - agent/xbox-one-seed-map
+  workflow_dispatch:
+
+jobs:
+  generate-map:
+    name: Build and generate Xbox One seed map
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository with pinned lce submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y clang-18 cmake ninja-build lld-18
+
+      - name: Configure Seedra library
+        run: |
+          cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=clang++-18 \
+            -DCMAKE_C_COMPILER=clang-18 \
+            -DLC_BUILD_EXECUTABLE=OFF
+
+      - name: Build Seedra library
+        run: cmake --build build --target LIB_Seedra -j $(nproc)
+
+      - name: Build custom seed runner
+        run: |
+          clang++-18 -std=c++23 -O2 -mavx2 -msse4.1 \
+            -I. -Ilce \
+            tools/user_seed_map.cpp \
+            build/libLIB_Seedra.a \
+            -o build/user_seed_map
+
+      - name: Generate biome map and coordinates
+        run: ./build/user_seed_map
+
+      - name: List generated files
+        run: find seed_output -maxdepth 2 -type f -print -exec ls -lh {} \;
+
+      - name: Upload generated map and coordinates
+        uses: actions/upload-artifact@v4
+        with:
+          name: xbox-one-seed--5155870644958840792
+          path: seed_output/
+          if-no-files-found: error
