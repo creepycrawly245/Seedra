@@ -41,6 +41,7 @@ int main() {
     info << "Biome size: LARGE\n";
     info << "Find Balanced Seed: OFF (raw seed passed directly to Generator)\n";
     info << "World coordinate bounds: +/-" << generator.getWorldCoordinateBounds() << '\n';
+    info << "Seedra default stronghold count: " << generator.getStrongholdCount() << '\n';
 
     const Pos2D spawn = generator.getSpawnBlock();
     info << "Spawn: " << spawn.x << ", " << spawn.z << '\n';
@@ -70,8 +71,20 @@ int main() {
     std::cout << "Finding ocean monuments..." << std::endl;
     writePositions(csv, "ocean_monument", Placement::Monument::getAllPositions(&generator));
 
-    std::cout << "Finding strongholds..." << std::endl;
-    writePositions(csv, "stronghold", Placement::Stronghold::getWorldPositions(generator));
+    // Stronghold audit: Seedra's WorldSettings defaults strongholdCount to 1.
+    // Preserve that old/default result, then explicitly test a 3-stronghold layout.
+    std::cout << "Finding strongholds with Seedra default count (1)..." << std::endl;
+    writePositions(csv, "stronghold_seedra_default_1", Placement::Stronghold::getWorldPositions(generator));
+
+    std::cout << "Finding strongholds with explicit count 3..." << std::endl;
+    generator.setStrongholdCount(3);
+    const auto strongholds3 = Placement::Stronghold::getWorldPositions(generator);
+    writePositions(csv, "stronghold_count3_audit", strongholds3);
+    info << "Stronghold audit explicit count: 3\n";
+    for (size_t i = 0; i < strongholds3.size(); ++i) {
+        info << "Stronghold count-3 candidate " << (i + 1) << ": "
+             << strongholds3[i].x << ", " << strongholds3[i].z << '\n';
+    }
 
     std::cout << "Finding mineshafts..." << std::endl;
     const auto mineshafts = Placement::Mineshaft::getAllPositions(generator);
