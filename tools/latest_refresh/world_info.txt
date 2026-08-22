@@ -1,0 +1,15 @@
+Seed: -5155870644958840792
+Console: Xbox One (XBOX1)
+Legacy version: ELYTRA
+World size: LARGE
+Biome size: LARGE
+Find Balanced Seed: OFF (raw seed passed directly to Generator)
+World coordinate bounds: +/-2560
+Seedra default stronghold count: 1
+Spawn: 224, 240
+Stronghold audit explicit count: 3
+Stronghold count-3 candidate 1: -764, -172
+Stronghold count-3 candidate 2: 884, -684
+Stronghold count-3 candidate 3: 212, 932
+Biome PNG: -5155870644958840792_ELYTRA_LARGE_LARGE.png
+Structure coordinates: structures.csv
