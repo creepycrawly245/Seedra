@@ -6,6 +6,9 @@ on:
       - agent/xbox-one-seed-map
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate-map:
     name: Build and generate Xbox One seed map
@@ -49,6 +52,19 @@ jobs:
         run: |
           find seed_output -maxdepth 2 -type f -print -exec ls -lh {} \;
           find dungeon_output -maxdepth 2 -type f -print -exec ls -lh {} \;
+
+      - name: Save latest refresh text back to branch
+        run: |
+          mkdir -p tools/latest_refresh
+          cp seed_output/world_info.txt tools/latest_refresh/world_info.txt
+          cp seed_output/structures.csv tools/latest_refresh/structures.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/latest_refresh/world_info.txt tools/latest_refresh/structures.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Save latest Seedra refresh results"
+            git push
+          fi
 
       - name: Upload generated map and coordinates
         uses: actions/upload-artifact@v4
